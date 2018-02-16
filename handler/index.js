@@ -61,6 +61,8 @@ class Handler {
         bot.onText(/\/results(@\w*)?/, (msg, match) => {
             logic.results(msg);
         });
+
+        bot.onText(/\/help/, () => logic.help(msg));
         
         bot.on('message', msg => logic.onMessage(msg));
         bot.on('message', msg => {

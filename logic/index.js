@@ -60,7 +60,7 @@ class AsyncLogic {
     }
 
     async showAnswers(msg) {
-        const competition = await this.db.Competition.findActive(msg.chat.id);
+        const competition = await this.db.Competition.findLatest(msg.chat.id);
         if (competition == null) {
             this.view.noActiveCompetition(msg);
             return;
@@ -143,6 +143,10 @@ class Logic {
 
     onAdminAbuse(msg) {
         this.view.replyAdminRequired(msg);
+    }
+
+    help(msg) {
+        this.view.sendHelpMessage(msg.chat.id);
     }
 
     newCompetition(msg, name, desc) {

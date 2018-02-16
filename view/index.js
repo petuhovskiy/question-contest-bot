@@ -25,11 +25,8 @@ class View {
         );
     }
 
-    sendJoinMessage(chatId) {
-        this.send(chatId, `
-            ${process.env.JOIN_MESSAGE}
-        
-            Команды администратора:
+    helpMessage() {
+        return trimMessage(`Команды администратора:
             /newcompetition [название] [описание] - Начать новый конкурс
             /closecompetition - Завершить конкурс
             /addpoints @username [очки] - Добавить очки за ответ
@@ -37,7 +34,18 @@ class View {
             Команды пользователя:
             /answer [ответ] - Ответить на вопрос конкурса
             /showanswers -  Показать ответы участников
-            /result - Показать таблицу результатов
+            /result - Показать таблицу результатов`);
+    }
+
+    sendHelpMessage(chatId) {
+        this.send(chatId, this.helpMessage());
+    }
+
+    sendJoinMessage(chatId) {
+        this.send(chatId, `
+            ${process.env.JOIN_MESSAGE}
+        
+            ${this.helpMessage()}
         `);
     }
 
