@@ -59,8 +59,8 @@ class AsyncLogic {
         }
     }
 
-    async showAnswers(chatId) {
-        const competition = await this.db.Competition.findActive(chatId);
+    async showAnswers(msg) {
+        const competition = await this.db.Competition.findActive(msg.chat.id);
         if (competition == null) {
             this.view.noActiveCompetition(msg);
             return;
@@ -162,7 +162,7 @@ class Logic {
     }
 
     showAnswers(msg) {
-        this.queue.add(() => this.async.showAnswers(msg.chat.id));
+        this.queue.add(() => this.async.showAnswers(msg));
     }
 
     results(msg) {
