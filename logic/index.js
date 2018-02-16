@@ -68,16 +68,58 @@ class AsyncLogic {
         this.view.showAnswers(competition, await this.db.Answer.findByCompetition(competition._id))
     }
 
+    async addPointsToUser(chatId, userId, name, points) {
+        let result = await this.db.Result.findByUser(chatId, userId);
+        if (result == null) {
+            result = new this.db.Result({
+                chatId,
+                userId,
+                name,
+                points
+            })
+        } else {
+            result.points += points;
+            result.name = name;
+        }
+        await result.save();
+    }
+
     async addPoints(msg, user, points) {
-        
+        const competition = await this.db.Competition.findLatest(msg.chat.id);
+        if (competition == null) {
+            this.view.noActiveCompetition(msg);
+            return;
+        }
+        let answer = await this.db.Answer.findByUsername(user.username, competition._id);
+        if (answer == null) {
+            answer = await this.db.Answer.findByFullname(user.query, competition._id);
+        }
+        if (answer == null) {
+            this.view.noUserFound(msg);
+            return;
+        }
+        await this.addPointsToUser(msg.chat.id, answer.userId, answer.username ? answer.username : answer.fullname, points);
+        answer.points += points;
+        await answer.save();
+        this.view.addPoints(answer, points);
     }
 
     async results(chatId) {
-        // const competition = await this.db.Competition.findActive(msg.chat.id); // TODO
-        // if (competition == null) {
-        //     this.view.noActiveCompetition(msg);
-        //     return;
-        // }
+        const competition = await this.db.Competition.findLatest(chatId);
+        let answers;
+        if (competition == null) {
+            answers = null;
+        } else {
+            answers = await this.db.Answer.findByCompetition(competition._id);
+            answers.sort((a, b) => {
+                return b.points - a.points;
+            });
+        }
+        const results = await this.db.Result.findByChat(chatId);
+        results.sort((a, b) => {
+            return b.points - a.points;
+        })
+        this.view.results(chatId, answers, results);
     }
 }
 

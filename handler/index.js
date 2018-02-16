@@ -36,7 +36,7 @@ class Handler {
             )
         );
 
-        bot.onText(/\/addpoints(@\w*)?\s+([@ \w]+)\s+(\d+)/, (msg, match) =>
+        bot.onText(/\/addpoints(@\w*)?\s+([@ \w]+)\s+([-\d]+)/, (msg, match) =>
             this.checkAdmin(msg,
                 () => logic.addPoints(msg, this.user(match[2]), parseInt(match[3]), match),
                 () => logic.onAdminAbuse(msg)

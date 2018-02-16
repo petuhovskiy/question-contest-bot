@@ -95,6 +95,35 @@ class View {
             ${this.answersText(answers)}
         `)
     }
+
+    noUserFound(msg) {
+        this.reply(msg, `
+            Не удалось найти такого пользователя!
+        `)
+    }
+
+    addPoints(answer, points) {
+        this.send(answer.chatId, `
+            Добавлено ${points} очков за ответ:
+            ${this.answerText(answer)}
+        `)
+    }
+
+    resultsAnswersText(answers) {
+        return answers
+            .map(it => `${it.points} очков <b>${it.displayName()}</b> за ответ: <i>${it.answer}</i>`)
+            .join('\n');
+    }
+
+    results(chatId, answers, results) {
+        let num = 0;
+        this.send(chatId, `
+            ${answers ? 'Результаты последнего конкурса:\n' + this.resultsAnswersText(answers) : ''}
+
+            Общие результаты:
+            ${results.map(it => `${++num}. <b>${it.name}</b> (${it.points} очков)`).join('\n')}
+        `)
+    }
 }
 
 module.exports = View
