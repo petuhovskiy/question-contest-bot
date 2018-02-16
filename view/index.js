@@ -27,7 +27,17 @@ class View {
 
     sendJoinMessage(chatId) {
         this.send(chatId, `
-            onJoinMessage
+            ${process.env.JOIN_MESSAGE}
+        
+            Команды администратора:
+            /newcompetition [название] [описание] - Начать новый конкурс
+            /closecompetition - Завершить конкурс
+            /addpoints @username [очки] - Добавить очки за ответ
+
+            Команды пользователя:
+            /answer [ответ] - Ответить на вопрос конкурса
+            /showanswers -  Показать ответы участников
+            /result - Показать таблицу результатов
         `);
     }
 
