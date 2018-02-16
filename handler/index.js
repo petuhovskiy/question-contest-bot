@@ -29,14 +29,14 @@ class Handler {
     init() {
         const { bot, logic } = this;
 
-        bot.onText(/\/newcompetition(@\w*)? (.+) (.*)/, (msg, match) =>
+        bot.onText(/\/newcompetition(@\w*)?\s+(\S+)\s+(.*)/, (msg, match) =>
             this.checkAdmin(msg,
                 () => logic.newCompetition(msg, match[2], match[3], match),
                 () => logic.onAdminAbuse(msg)
             )
         );
 
-        bot.onText(/\/addpoints(@\w*)? ([@\w]+) (\d+)/, (msg, match) =>
+        bot.onText(/\/addpoints(@\w*)?\s+([@ \w]+)\s+(\d+)/, (msg, match) =>
             this.checkAdmin(msg,
                 () => logic.addPoints(msg, this.user(match[2]), parseInt(match[3]), match),
                 () => logic.onAdminAbuse(msg)
@@ -50,7 +50,7 @@ class Handler {
             )
         );
 
-        bot.onText(/\/answer(@\w*)? (.*)/, (msg, match) => {
+        bot.onText(/\/answer(@\w*)?\s+(.*)/, (msg, match) => {
             logic.answer(msg, match[2], match);
         });
 
