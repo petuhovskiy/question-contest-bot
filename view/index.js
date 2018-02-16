@@ -57,7 +57,7 @@ class View {
 
     closeCompetition(competition, answers) {
         this.send(competition.chatId, `
-            Конкурс завершен!
+            Прием ответов завершен!
             ${this.competitionText(competition)}
 
             ${this.answersText(answers)}
