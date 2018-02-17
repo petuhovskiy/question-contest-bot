@@ -36,7 +36,7 @@ class AsyncLogic {
             this.view.noActiveCompetition(msg);
             return;
         }
-        const username = msg.from.username;
+        let username = msg.from.username;
         if (username != null) {
             username = username.toLowerCase();
         }
