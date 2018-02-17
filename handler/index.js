@@ -58,7 +58,7 @@ class Handler {
             logic.showAnswers(msg);
         });
 
-        bot.onText(/\/results(@\w*)?/, (msg, match) => {
+        bot.onText(/\/result(@\w*)?/, (msg, match) => {
             logic.results(msg);
         });
 
