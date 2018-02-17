@@ -36,13 +36,18 @@ class AsyncLogic {
             this.view.noActiveCompetition(msg);
             return;
         }
+        const username = msg.from.username;
+        if (username != null) {
+            username = username.toLowerCase();
+        }
+        const fullname = msg.from.first_name + ' ' + msg.from.last_name;
         let dbAnswer = await this.db.Answer.findByUserAndCompetition(msg.from.id, competition._id);
         if (dbAnswer == null) {
             dbAnswer = new this.db.Answer({
                 chatId: msg.chat.id,
-                username: msg.from.username,
+                username,
                 userId: msg.from.id,
-                fullname: msg.from.first_name + ' ' + msg.from.last_name,
+                fullname,
                 answer,
                 competitionId: competition._id
             });
@@ -52,8 +57,8 @@ class AsyncLogic {
             const lastAnswer = dbAnswer.toObject();
             dbAnswer.answer = answer;
             dbAnswer.date = Date.now();
-            dbAnswer.username = msg.from.username;
-            dbAnswer.fullname = msg.from.first_name + ' ' + msg.from.last_name;
+            dbAnswer.username = username;
+            dbAnswer.fullname = fullname;
             await dbAnswer.save();
             this.view.replyAnswer(msg, dbAnswer.toObject(), lastAnswer);
         }
